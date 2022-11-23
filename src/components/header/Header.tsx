@@ -1,8 +1,4 @@
-import React, {useState} from 'react';
-
-import AppBar from '@mui/material/AppBar';
 import Link from '@mui/material/Link';
-
 import '../../styles/header.scss';
 
 const Header = () => {
@@ -12,6 +8,7 @@ const Header = () => {
         <div className="left">
             <img alt="logo" src="../../assets/img/logo-bike4life.png" />
             <Link underline='none' href='/routes'>Find a route!</Link>
+            <Link underline='none' href='/create-route'>Create a route!</Link>
         </div>
         <div className="right">
             <Link underline='none' href='/sign-up'>Sign up</Link>
