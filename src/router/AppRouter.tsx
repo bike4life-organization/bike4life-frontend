@@ -1,11 +1,13 @@
-import React from 'react'
 import Login from '../pages/login/Login';
+import NewRoute from '../pages/new-route/NewRoute';
+import FindRoute from '../pages/find-route/FindRoute';
 import SignUp from '../pages/sign-up/SignUp';
 
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+
 
 
 const AppRouter = () => {
@@ -21,7 +23,12 @@ const AppRouter = () => {
     },
     {
       path: '/routes',
-      element: <Login />
+      element: <FindRoute />
+    },
+    {
+      path: '/create-route',
+      element: <NewRoute />
+
     },
     {
       path: '/sign-up',
