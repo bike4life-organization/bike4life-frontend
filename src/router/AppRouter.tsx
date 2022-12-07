@@ -28,12 +28,12 @@ const AppRouter = () => {
     {
       path: '/create-route',
       element: <NewRoute />
-
     },
     {
       path: '/sign-up',
       element: <SignUp />
-    }
+    },
+    
   ])
 
   return (
