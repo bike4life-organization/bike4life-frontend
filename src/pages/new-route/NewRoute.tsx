@@ -11,6 +11,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import FeedIcon from '@mui/icons-material/Feed';
 import "../../styles/new-route.scss";
+import MapBox from "../../components/map-box/MapBox";
 
 const NewRoute = () => {
   const theme = createTheme();
@@ -64,6 +65,11 @@ const NewRoute = () => {
                   }}
                 />
               </LocalizationProvider>
+            </div>
+          </div>
+          <div className="row" style={{width: "100%"}}>
+            <div className="col" style={{width: "100%"}}>
+              <MapBox/>
             </div>
           </div>
           <div className="row">
