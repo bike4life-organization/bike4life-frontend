@@ -9,7 +9,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import FeedIcon from '@mui/icons-material/Feed';
+import FeedIcon from "@mui/icons-material/Feed";
 import "../../styles/new-route.scss";
 
 const NewRoute = () => {
@@ -73,9 +73,7 @@ const NewRoute = () => {
               variant="outlined"
               sx={{ m: 3, width: "73ch" }}
               InputProps={{
-                startAdornment: (
-                  <FeedIcon />
-                ),
+                startAdornment: <FeedIcon />,
               }}
             />
           </div>
@@ -86,7 +84,7 @@ const NewRoute = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Sign Up
+          Create Route!
         </Button>
       </div>
     </ThemeProvider>

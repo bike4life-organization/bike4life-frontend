@@ -1,25 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Route } from "../../types/Route";
-import Link from "@mui/material/Link";
-import FindRoute from "../../pages/find-route/FindRoute";
+import RouteServices from "../../services/RouteServices";
+import { RoutesContext } from "../../contexts/routes-context";
 
 const RouteCard = ({ route }: any) => {
-  /**
-   *
-   * const deleteHandler = (routeId) => {
-   *  deleteRoute(routeId)
-   *      .then(res => console.log(res))
-   *      .catch(err => console.error(err));
-   *      .finally(() => getAllRoutes())
-   * }
-   */
+  const { setRoutes } = useContext(RoutesContext);
+
+  const deleteHandler = (routeId: string) => {
+    RouteServices.remove(routeId)
+      .then((res) => console.log(res))
+      .catch((err) => console.error(err))
+      .finally(() => {
+        RouteServices.getAllRoutes()
+          .then((response) => setRoutes(response.data))
+          .catch((error) => console.error(error));
+      });
+  };
 
   return (
     <Card sx={{ width: 545 }}>
@@ -34,7 +35,7 @@ const RouteCard = ({ route }: any) => {
       <CardActions>
         <Button variant="outlined">More information</Button>
         <Button
-          onClick={FindRoute.deleteRoute(route.routeId)}
+          onClick={() => deleteHandler(route._id)}
           variant="outlined"
           color="error"
           startIcon={<DeleteIcon />}

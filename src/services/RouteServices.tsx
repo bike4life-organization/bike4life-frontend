@@ -1,19 +1,20 @@
 import http from "../commons/http-common";
+import { Route } from "../types/Route";
 
 const getAllRoutes = () => {
-  return http.get("/listRoutes");
+  return http.get<Route[], any>("/");
 };
 
-const create = (data: any) => {
-  return http.post("/createRoute", data);
+const create = (data: Route) => {
+  return http.post("/", data);
 };
 
-const update = (id: any, data: any) => {
-  return http.put(`/updateRoute/${id}`, data);
+const update = (id: string, data: Route) => {
+  return http.put(`/${id}`, data);
 };
 
-const remove = (id: any) => {
-  return http.delete(`/removeRoute/${id}`);
+const remove = (id: string) => {
+  return http.delete(`/${id}`);
 };
 
 const RouteServices = {
