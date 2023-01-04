@@ -7,6 +7,7 @@ import CardActions from "@mui/material/CardActions";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RouteServices from "../../services/RouteServices";
 import { RoutesContext } from "../../contexts/routes-context";
+import { Link } from "react-router-dom";
 
 const RouteCard = ({ route }: any) => {
   const { setRoutes } = useContext(RoutesContext);
@@ -33,7 +34,9 @@ const RouteCard = ({ route }: any) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button variant="outlined">More information</Button>
+        <Button variant="outlined">
+          <Link to={`/edit-route/` + route._id}> More information</Link>
+        </Button>
         <Button
           onClick={() => deleteHandler(route._id)}
           variant="outlined"

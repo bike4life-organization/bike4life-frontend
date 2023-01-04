@@ -10,12 +10,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import FeedIcon from "@mui/icons-material/Feed";
-import "../../styles/new-route.scss";
+import "../../styles/route-form.scss";
+import MapBox from "../map-box/MapBox";
 
-const NewRoute = () => {
+const RouteForm = ({ msg, selectedRoute, setSelectedRoute }: any) => {
   const theme = createTheme();
   const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-07"));
-
   return (
     <ThemeProvider theme={theme}>
       <div className="new-route-container">
@@ -24,7 +24,7 @@ const NewRoute = () => {
             <DirectionsBikeIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Create a route!
+            {msg}
           </Typography>
           <div className="row">
             <div className="col">
@@ -66,6 +66,11 @@ const NewRoute = () => {
               </LocalizationProvider>
             </div>
           </div>
+          <div className="row" style={{ width: "100%" }}>
+            <div className="col" style={{ width: "100%" }}>
+              <MapBox />
+            </div>
+          </div>
           <div className="row">
             <TextField
               label="More information"
@@ -84,11 +89,11 @@ const NewRoute = () => {
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
         >
-          Create Route!
+          {msg}
         </Button>
       </div>
     </ThemeProvider>
   );
 };
 
-export default NewRoute;
+export default RouteForm;
