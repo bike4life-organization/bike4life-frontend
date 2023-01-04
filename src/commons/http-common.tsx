@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:3333/routes";
 const validToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbnRhY3RqYXZpcnVpejI3QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiamF2aTI3MTEiLCJfaWQiOiI2M2I0NmZhNGUwZDI4NmYxY2E4ZDk2NmYiLCJpYXQiOjE2NzI4NDg5ODIsImV4cCI6MTY3Mjg1MjU4Mn0.3KlYxiQHOUE4iS2KipJ03Rr5Dv_8Q16fsk3l-UhS07E";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbnRhY3RqYXZpcnVpejI3QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiamF2aTI3MTEiLCJfaWQiOiI2M2I0NmZhNGUwZDI4NmYxY2E4ZDk2NmYiLCJpYXQiOjE2NzI4NTYyNjgsImV4cCI6MTY3Mjg1OTg2OH0.dBR_AZEUD-IC7EaeqskoJJBmYWZvfz6WYl1-mA4H-2g";
 
 export default axios.create({
   baseURL: BASE_URL,

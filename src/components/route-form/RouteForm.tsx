@@ -13,9 +13,10 @@ import FeedIcon from "@mui/icons-material/Feed";
 import "../../styles/route-form.scss";
 import MapBox from "../map-box/MapBox";
 
-const RouteForm = ({ msg, selectedRoute, setSelectedRoute }: any) => {
+const RouteForm = ({ msg, route, setRoute, handlerUpdateRoute }: any) => {
   const theme = createTheme();
   const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-07"));
+
   return (
     <ThemeProvider theme={theme}>
       <div className="new-route-container">
@@ -32,7 +33,8 @@ const RouteForm = ({ msg, selectedRoute, setSelectedRoute }: any) => {
                 required
                 fullWidth
                 name="start-place"
-                label="Start Place"
+                label="Start date"
+                value={route.coordinates[0]}
                 id="start-place"
               />
               <TextField
@@ -41,7 +43,8 @@ const RouteForm = ({ msg, selectedRoute, setSelectedRoute }: any) => {
                 required
                 fullWidth
                 id="routeName"
-                label="Route Name"
+                label={route.name}
+                value={route.name}
                 autoFocus
               />
             </div>
@@ -50,15 +53,16 @@ const RouteForm = ({ msg, selectedRoute, setSelectedRoute }: any) => {
                 required
                 fullWidth
                 name="end-place"
-                label="End Place"
+                label="End place"
+                value={route.coordinates[0]}
                 id="end-place"
               />
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   renderInput={(props) => <TextField {...props} />}
-                  label="DateTimePicker"
-                  value={value}
+                  label="Fecha y hora"
+                  value={route.date}
                   onChange={(newValue) => {
                     setValue(newValue);
                   }}
@@ -73,9 +77,10 @@ const RouteForm = ({ msg, selectedRoute, setSelectedRoute }: any) => {
           </div>
           <div className="row">
             <TextField
-              label="More information"
-              id="more-information"
+              label="Description"
+              id="description"
               variant="outlined"
+              value={route.description}
               sx={{ m: 3, width: "73ch" }}
               InputProps={{
                 startAdornment: <FeedIcon />,
@@ -88,6 +93,7 @@ const RouteForm = ({ msg, selectedRoute, setSelectedRoute }: any) => {
           type="submit"
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          onClick={handlerUpdateRoute}
         >
           {msg}
         </Button>
