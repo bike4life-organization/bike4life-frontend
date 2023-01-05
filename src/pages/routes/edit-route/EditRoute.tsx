@@ -7,7 +7,8 @@ import { Route } from "../../../types/Route";
 import { useNavigate } from "react-router-dom";
 
 const EditRoute = () => {
-  const { routes } = useContext(RoutesContext);
+  const { routes, setRoutes } = useContext(RoutesContext);
+
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -15,12 +16,20 @@ const EditRoute = () => {
     return routes.find((el: Route) => el._id === id);
   }, [routes, id]);
 
-  const handlerUpdateRoute = (event: React.FormEvent<HTMLFormElement>) => {
+  const handlerUpdateRoute = (
+    event: React.FormEvent<HTMLFormElement>,
+    route: Route
+  ) => {
     event.preventDefault();
-    RouteServices.update(selected._id, selected)
+    RouteServices.update(selected._id, route)
       .then((result) => console.log(result))
       .catch((err) => console.error(err))
-      .finally(() => navigate("/routes"));
+      .finally(() => {
+        RouteServices.getAllRoutes()
+          .then((response) => setRoutes(response.data))
+          .catch((error) => console.error(error));
+        navigate("/routes");
+      });
   };
 
   return selected ? (

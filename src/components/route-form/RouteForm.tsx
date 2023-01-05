@@ -101,7 +101,7 @@ const RouteForm = ({ msg, routeSelected, handlerUpdateRoute }: any) => {
           type="submit"
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
-          onClick={handlerUpdateRoute}
+          onClick={(event) => handlerUpdateRoute(event, route)}
         >
           {msg}
         </Button>
