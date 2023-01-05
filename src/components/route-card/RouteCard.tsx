@@ -24,8 +24,8 @@ const RouteCard = ({ route }: any) => {
   };
 
   return (
-    <Card sx={{ width: 545 }}>
-      <CardContent>
+    <Card sx={{ width: 545 }} style={{ backgroundColor: "#F9FBFa" }}>
+      <CardContent style={{ textAlign: "center" }}>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {route.name}
         </Typography>
@@ -33,7 +33,7 @@ const RouteCard = ({ route }: any) => {
           {route.description}
         </Typography>
       </CardContent>
-      <CardActions>
+      <CardActions style={{ justifyContent: "center" }}>
         <Button variant="outlined">
           <Link
             style={{ textDecoration: "none" }}
