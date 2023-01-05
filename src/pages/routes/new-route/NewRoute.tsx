@@ -2,8 +2,13 @@ import React, { useState } from "react";
 import RouteForm from "../../../components/route-form/RouteForm";
 import { Route } from "../../../types/Route";
 
+const nuevoArray = new Array(2);
+//En cada posición de nuevoArray guardamos un nuevo array
+nuevoArray[0] = new Array(2);
+nuevoArray[1] = new Array(2);
+
 export const emptyRoute = {
-  coordinates: null,
+  coordinates: nuevoArray,
   date: new Date(),
   name: "",
   description: "",

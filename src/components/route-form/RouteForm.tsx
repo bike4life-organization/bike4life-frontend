@@ -45,6 +45,9 @@ const RouteForm = ({ msg, route, setRoute, handlerUpdateRoute }: any) => {
                 id="routeName"
                 label={route.name}
                 value={route.name}
+                onChange={(event) =>
+                  setRoute({ ...route, name: event.target.value })
+                }
                 autoFocus
               />
             </div>
@@ -54,7 +57,7 @@ const RouteForm = ({ msg, route, setRoute, handlerUpdateRoute }: any) => {
                 fullWidth
                 name="end-place"
                 label="End place"
-                value={route.coordinates[0]}
+                value={route.coordinates[1]}
                 id="end-place"
               />
 
@@ -82,6 +85,9 @@ const RouteForm = ({ msg, route, setRoute, handlerUpdateRoute }: any) => {
               variant="outlined"
               value={route.description}
               sx={{ m: 3, width: "73ch" }}
+              onChange={(event) =>
+                setRoute({ ...route, description: event.target.value })
+              }
               InputProps={{
                 startAdornment: <FeedIcon />,
               }}
