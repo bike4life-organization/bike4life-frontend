@@ -1,5 +1,9 @@
 export type Route = {
-    routeId: number
-    name: string
-    description: string
-  };
+  coordinates: number[][];
+  date: Date;
+  name: string;
+  description: string;
+  estimatedDuration: number;
+  userId: string;
+  _id?: string;
+};

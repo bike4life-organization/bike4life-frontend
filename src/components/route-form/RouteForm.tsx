@@ -9,12 +9,15 @@ import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import FeedIcon from '@mui/icons-material/Feed';
-import "../../styles/new-route.scss";
+import FeedIcon from "@mui/icons-material/Feed";
+import "../../styles/route-form.scss";
+import MapBox from "../map-box/MapBox";
 
-const NewRoute = () => {
+const RouteForm = ({ msg, routeSelected, handlerUpdateRoute }: any) => {
   const theme = createTheme();
   const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-07"));
+
+  const [route, setRoute] = useState(routeSelected);
 
   return (
     <ThemeProvider theme={theme}>
@@ -24,7 +27,7 @@ const NewRoute = () => {
             <DirectionsBikeIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Create a route!
+            {msg}
           </Typography>
           <div className="row">
             <div className="col">
@@ -33,6 +36,7 @@ const NewRoute = () => {
                 fullWidth
                 name="start-place"
                 label="Start Place"
+                value={null}
                 id="start-place"
               />
               <TextField
@@ -41,7 +45,11 @@ const NewRoute = () => {
                 required
                 fullWidth
                 id="routeName"
-                label="Route Name"
+                label={route.name}
+                value={route.name}
+                onChange={(event) =>
+                  setRoute({ ...route, name: event.target.value })
+                }
                 autoFocus
               />
             </div>
@@ -50,15 +58,16 @@ const NewRoute = () => {
                 required
                 fullWidth
                 name="end-place"
-                label="End Place"
+                label="End place"
+                value={null}
                 id="end-place"
               />
 
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DateTimePicker
                   renderInput={(props) => <TextField {...props} />}
-                  label="DateTimePicker"
-                  value={value}
+                  label="Fecha y hora"
+                  value={route.date}
                   onChange={(newValue) => {
                     setValue(newValue);
                   }}
@@ -66,16 +75,23 @@ const NewRoute = () => {
               </LocalizationProvider>
             </div>
           </div>
+          <div className="row" style={{ width: "100%" }}>
+            <div className="col" style={{ width: "100%" }}>
+              <MapBox />
+            </div>
+          </div>
           <div className="row">
             <TextField
-              label="More information"
-              id="more-information"
+              label="Description"
+              id="description"
               variant="outlined"
+              value={route.description}
               sx={{ m: 3, width: "73ch" }}
+              onChange={(event) =>
+                setRoute({ ...route, description: event.target.value })
+              }
               InputProps={{
-                startAdornment: (
-                  <FeedIcon />
-                ),
+                startAdornment: <FeedIcon />,
               }}
             />
           </div>
@@ -85,12 +101,13 @@ const NewRoute = () => {
           type="submit"
           variant="contained"
           sx={{ mt: 3, mb: 2 }}
+          onClick={(event) => handlerUpdateRoute(event, route)}
         >
-          Sign Up
+          {msg}
         </Button>
       </div>
     </ThemeProvider>
   );
 };
 
-export default NewRoute;
+export default RouteForm;

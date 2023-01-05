@@ -1,9 +1,11 @@
 .find-route{
 
     .find-route-container{
-        margin-top: 24px;   
-        display: flex;
-        flex-direction: column;
+        margin-top: 24px; 
+        margin-left: 14vh;  
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 150px);
         align-items: center;
         gap: 36px;
     }

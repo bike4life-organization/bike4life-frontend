@@ -3,10 +3,10 @@ import AppRouter from "./router/AppRouter";
 
 const App = () => {
   return (
-      <MainLayaout>
-        <AppRouter />
-      </MainLayaout>
+    <MainLayaout>
+      <AppRouter />
+    </MainLayaout>
   );
-}
+};
 
 export default App;
