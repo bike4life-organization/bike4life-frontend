@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import RouteForm from "../../../components/route-form/RouteForm";
 import { RoutesContext } from "../../../contexts/routes-context";
@@ -11,26 +11,25 @@ const EditRoute = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [selectedRoute, setSelectedRoute] = useState(
-    routes.find((el: Route) => el._id === id)
-  );
+  const selected = useMemo(() => {
+    return routes.find((el: Route) => el._id === id);
+  }, [routes, id]);
 
   const handlerUpdateRoute = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    RouteServices.update(selectedRoute._id, selectedRoute)
+    RouteServices.update(selected._id, selected)
       .then((result) => console.log(result))
       .catch((err) => console.error(err))
       .finally(() => navigate("/routes"));
   };
 
-  return (
+  return selected ? (
     <RouteForm
       msg="Edit route"
-      route={selectedRoute}
-      setRoute={setSelectedRoute}
+      routeSelected={selected}
       handlerUpdateRoute={handlerUpdateRoute}
     />
-  );
+  ) : null;
 };
 
 export default EditRoute;

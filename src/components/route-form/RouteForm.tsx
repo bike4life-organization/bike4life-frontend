@@ -13,9 +13,11 @@ import FeedIcon from "@mui/icons-material/Feed";
 import "../../styles/route-form.scss";
 import MapBox from "../map-box/MapBox";
 
-const RouteForm = ({ msg, route, setRoute, handlerUpdateRoute }: any) => {
+const RouteForm = ({ msg, routeSelected, handlerUpdateRoute }: any) => {
   const theme = createTheme();
   const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-07"));
+
+  const [route, setRoute] = useState(routeSelected);
 
   return (
     <ThemeProvider theme={theme}>
@@ -33,8 +35,8 @@ const RouteForm = ({ msg, route, setRoute, handlerUpdateRoute }: any) => {
                 required
                 fullWidth
                 name="start-place"
-                label="Start date"
-                value={route.coordinates[0]}
+                label="Start Place"
+                value={null}
                 id="start-place"
               />
               <TextField
@@ -57,7 +59,7 @@ const RouteForm = ({ msg, route, setRoute, handlerUpdateRoute }: any) => {
                 fullWidth
                 name="end-place"
                 label="End place"
-                value={route.coordinates[1]}
+                value={null}
                 id="end-place"
               />
 

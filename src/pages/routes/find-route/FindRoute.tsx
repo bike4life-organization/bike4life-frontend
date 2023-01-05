@@ -1,19 +1,12 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import RouteCard from "../../../components/route-card/RouteCard";
 import { RoutesContext } from "../../../contexts/routes-context";
-import RouteServices from "../../../services/RouteServices";
 
 import "../../../styles/find-route.scss";
 import { Route } from "../../../types/Route";
-import EditRoute from "../edit-route/EditRoute";
 
 const FindRoute = () => {
-  const { routes, setRoutes } = useContext(RoutesContext);
-  useEffect(() => {
-    RouteServices.getAllRoutes()
-      .then((result) => setRoutes(result.data))
-      .catch((err) => console.error(err));
-  }, []);
+  const { routes } = useContext(RoutesContext);
 
   return (
     <div className="find-route">

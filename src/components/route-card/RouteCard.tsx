@@ -35,7 +35,13 @@ const RouteCard = ({ route }: any) => {
       </CardContent>
       <CardActions>
         <Button variant="outlined">
-          <Link to={`/edit-route/` + route._id}> More information</Link>
+          <Link
+            style={{ textDecoration: "none" }}
+            to={`/edit-route/` + route._id}
+          >
+            {" "}
+            More information
+          </Link>
         </Button>
         <Button
           onClick={() => deleteHandler(route._id)}

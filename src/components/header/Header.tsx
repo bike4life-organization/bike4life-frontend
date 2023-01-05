@@ -5,7 +5,9 @@ const Header = () => {
   return (
     <div className="header">
       <div className="left">
-        <img alt="logo" src="../../assets/img/logo-bike4life.png" />
+        <a href="/">
+          <img alt="logo" src="../../assets/img/logo-bike4life.png" />
+        </a>
         <Link underline="none" href="/routes">
           Find a route!
         </Link>

@@ -20,7 +20,7 @@ export const emptyRoute = {
 const NewRoute = () => {
   const [route, setRoute] = useState<Route | any>(emptyRoute);
 
-  return <RouteForm msg="Create Route" route={route} setRoute={setRoute} />;
+  return <RouteForm msg="Create Route" routeSelected={route} />;
 };
 
 export default NewRoute;
