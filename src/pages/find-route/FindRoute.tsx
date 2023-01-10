@@ -1,6 +1,8 @@
-import React, {useState, useEffect} from 'react'
-import RouteCard from '../../components/route-card/RouteCard';
-import '../../styles/find-route.scss';
+import React, { useState, useEffect } from "react";
+import RouteCard from "../../components/route-card/RouteCard";
+import "../../styles/find-route.scss";
+import { Route } from "../../types/Route";
+import dayjs from "dayjs";
 
 const routesMock = [
   {
@@ -28,11 +30,22 @@ const routesMock = [
     name: "Salida con los chabales",
     description: "hola",
   },
-]
+];
 
 const FindRoute = () => {
+  const [routes, setRoutes] = useState<Route[]>();
 
-  const [routes, setRoutes] = useState(routesMock);
+  useEffect(() => {
+    fetch(`http://localhost:3333/routes/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => setRoutes(res));
+  }, []);
 
   useEffect(() => {
     //llamar a la api
@@ -40,21 +53,19 @@ const FindRoute = () => {
       .then(result => setRoutes(result))
       .catch(err => console.error(err);
     */
-  }, [])
-  
+  }, []);
 
-
+  console.log(routes);
   return (
-    <div className='find-route'>
+    <div className="find-route">
       <div className="find-route-container">
-        {
-          routes.map((e, index) => {
-            return <RouteCard key={index} route={e} />
-          })
-        }
+        {routes?.map((e) => {
+          console.log(e.userId);
+          return <RouteCard key={e._id} route={e} userId={e.userId} />;
+        })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FindRoute
+export default FindRoute;

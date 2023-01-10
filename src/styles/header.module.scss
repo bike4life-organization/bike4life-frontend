@@ -1,0 +1,141 @@
+@import "./variables.scss";
+
+.header{
+    position: fixed;
+    z-index: 9999;
+    background: #c00cae;  
+    width: 100%;
+    height: 4em;
+    @include breakpoint(md){
+        padding: 0 3rem;
+    }
+    transition: 0.2s ease all;
+
+    &__content{
+        overflow: hidden;
+        color: #f2f2f2;
+        margin: 0 auto;
+        max-width: 1920px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 99999;
+
+        &__logo{
+            font-size: 1.6rem;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+        }
+        &__nav{
+            top: 0;
+            right: 100%;
+            bottom: 0;
+            width: 100%;
+            position: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: rgba($color: #c00cae, $alpha: 1.0);
+            backdrop-filter: blur(2px);
+            transform: translate(0);
+            transition: 0.3s ease transform;
+
+            @include breakpoint(md){
+                transform: none;
+                flex-direction: row;
+                background: transparent;
+                width: auto;
+                height: 100%;
+                position: static;
+            }
+            ul{
+                list-style: none;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                margin-bottom: $spacing-lg;
+                @include breakpoint(md){
+                    flex-direction: row;
+                    align-items: center;
+                    margin-bottom: 0;
+                    margin-right: calc(0.5rem + #{$spacing-md});
+                }
+                li{
+                    &:not(:last-child){
+                        margin-bottom: $spacing-lg;
+                        @include breakpoint(md){
+                            margin-bottom: 0;
+                            margin-right: $spacing-md;
+                        }
+                    }
+                a{
+                    text-decoration: none;
+                    color: #fff;
+                    padding: 0.7rem 1.25rem;
+                    border-radius: 12px;
+                    transition: 0.3s ease all;
+
+                    &:hover{
+                        background: rgba($color: #f2f2f2, $alpha: 0.1);
+                    }
+                    &:active{
+                        background: calc(#{$border-radius} + 6px);
+                        background: #f2f2f2;
+                    }
+                }
+            }
+            }
+            button{
+                cursor: pointer;
+                outline: none;
+                padding: 0.7rem 1.25;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-family: inherit;
+                background-color: #f2f2f2;
+                border: 1px solid transparent;
+                transition: 0.3s ease all;
+        
+                &:hover{
+                    border-color: #f2f2f2;
+                    background: rgba($color: #f2f2f2, $alpha: 0.1);
+                    color: #f2f2f2;
+                }
+                &:active{
+                    border-color: #f2f2f2;
+                    background: linear-gradient(rgba(#f2f2f2, 0.1), rgba(#c00cae, 0.3));
+                    color: #f2f2f2;
+                }
+            }
+            &.isMenu{
+                transform: translate(100%);
+            }
+        }
+        &__toggle{
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            transition: 0.3s ease all;
+            position: relative;
+
+            &:hover{
+                color: #f2f2f2
+            }
+
+            @include breakpoint(md){
+                display: none;
+            }
+        }
+    }
+    
+}
+
+a{
+    color: #fff;
+}

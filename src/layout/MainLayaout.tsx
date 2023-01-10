@@ -1,13 +1,13 @@
-import React from 'react'
-import Header from '../components/header/Header'
+import React from "react";
+import Header from "../components/header/Header";
 
 const MainLayaout = ({ children }: any) => {
   return (
     <>
-        <Header />
-        {children}
+        {<Header />}
+        {children} 
     </>
-  )
-}
+  );
+};
 
-export default MainLayaout
+export default MainLayaout;

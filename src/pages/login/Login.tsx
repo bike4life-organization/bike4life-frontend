@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useContext, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,8 +12,15 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Navigate } from 'react-router-dom';
+import useUser from '../../helpers/useUser';
+import { UserContext } from '../../context/user/UserContext';
+import { useEffect } from 'react';
+import { token } from '../../helpers/TOKEN';
+
 
 function Copyright(props: any) {
+
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
@@ -29,14 +36,56 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignIn() {
+  const [login, setLogin] = useState(false)
+  const [mail, setMail] = useState("")
+  const [password, setPassword] = useState("")
+  const {loggin, isLoggedIn, loggout} = useUser( )
+  const {setToken} = useContext(UserContext)
+
+useEffect(() => {
+  setLogin(isLoggedIn)
+}, [isLoggedIn])
+
+  
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+    let data = new FormData(event.currentTarget);
+    const user = {
+      email: data.get("email"),
+      password: data.get("password"),
+    }
+    console.log(user)
+    loggin(user.email, user.password)
+  };
+/*
+  const submitLogin = async (user: any) => {
+    fetch(`http://localhost:3334/users/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    }).then((res) => {
+      if (res.status === 200) {
+        console.log("User logged in");
+        console.log(res.json())
+        return res.json()
+      } else if (res.status === 409) {
+        console.log("User already logged in");
+        
+      }else if(res.status == 404){
+       console.log("User not foud")
+      }else{
+        console.log(res.status)
+      }
+    }).then(res=>{
+      const {token} = res
+      return token
     });
   };
+*/
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -65,6 +114,8 @@ export default function SignIn() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              value={mail}
+              onChange = {e=>setMail(e.target.value)}
               autoFocus
             />
             <TextField
@@ -75,6 +126,8 @@ export default function SignIn() {
               label="Password"
               type="password"
               id="password"
+              value={password}
+              onChange = {e=>setPassword(e.target.value)}
               autoComplete="current-password"
             />
             <FormControlLabel
@@ -105,6 +158,9 @@ export default function SignIn() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      {isLoggedIn && (
+          <Navigate to="/create-route" replace={true} />
+        )}
     </ThemeProvider>
   );
 }
