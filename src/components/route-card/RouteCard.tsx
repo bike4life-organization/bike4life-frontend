@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
@@ -6,8 +6,12 @@ import Typography from "@mui/material/Typography";
 import CardActions from "@mui/material/CardActions";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
+import RouteServices from "../../services/RouteServices";
+import { RoutesContext } from "../../context/route/routes-context";
+
 
 const RouteCard = ({ route }: any) => {
+  const { routes, setRoutes } = useContext(RoutesContext);
   /**
    *
    * const deleteHandler = (routeId) => {
@@ -17,18 +21,32 @@ const RouteCard = ({ route }: any) => {
    *      .finally(() => getAllRoutes())
    * }
    */
+
+  const deleteHandler = (routeId : any) => {
+    RouteServices.remove(routeId)
+    .then((res)=> {
+      if(res.data == "OK"){
+        const newRoutes = routes?.filter((route: any) => route._id !== routeId)
+        setRoutes(newRoutes)
+      }
+    })
+
+  };
   console.log(route._id);
   return (
-    <Card sx={{ width: 545 }}>
-      <CardContent>
+    <Card sx={{ width: 545 }} style={{ backgroundColor: "#F9FBFa" }}>
+      <CardContent style={{ textAlign: "center" }}>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {route.name}
+          {`Name: ${route.name}`}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {route.description}
+          {`Description: ${route.description}`}
+        </Typography>
+        <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          {`Estimated duration: ${route.estimatedDuration} min`}
         </Typography>
       </CardContent>
-      <CardActions>
+      <CardActions style={{ justifyContent: "center" }}>
         <Button variant="outlined">
           <Link
             style={{ textDecoration: "none" }}
@@ -48,7 +66,8 @@ const RouteCard = ({ route }: any) => {
           </Link>
         </Button>
         <Button
-          /* onClick={deleteHandler(route.routeId)} */ variant="outlined"
+          onClick={() => deleteHandler(route._id)}
+          variant="outlined"
           color="error"
           startIcon={<DeleteIcon />}
         >

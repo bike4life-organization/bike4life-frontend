@@ -20,7 +20,7 @@ import { Route } from "../../types/Route";
 import { useParams } from "react-router-dom";
 
 const ViewRoute = () => {
-  const { info, points, getRoutesBtwPoints, map, drawLine } =
+  const { info, points, getRoutesBtwPoints, map, drawLine, getPolyline } =
     useContext(MapContext);
   const { token } = useContext(UserContext);
   const [route, setRoute] = useState<Route>();
@@ -53,12 +53,12 @@ const ViewRoute = () => {
     setValue(route?.date);
     setUserId(route?.userId);
     if (route?.coordinates !== undefined) {
-      drawLine(map, route?.coordinates);
+      getPolyline(map, route?.coordinates);
     }
   }, [route]);
 
   const submitPostRoute = (route: any) => {
-    fetch(`http://localhost:3333/routes`, {
+    /*fetch(`http://localhost:3333/routes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -72,7 +72,8 @@ const ViewRoute = () => {
       } else if (res.status === 409) {
         console.log("Route already exists");
       }
-    });
+    });*/
+    
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

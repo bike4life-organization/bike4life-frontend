@@ -12,16 +12,18 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import "../../styles/new-route.scss";
 import { MapContext } from "../../context";
 import { MapLine } from "../../components/mapbox/MapLineEdit";
-import { BtnMyLocation} from "../../components/mapbox";
+import { BtnMyLocation } from "../../components/mapbox";
 import Box from "@mui/material/Box";
 import { UserContext } from "../../context/user/UserContext";
 import DirectionsIcon from "@mui/icons-material/Directions";
 import { Route } from "../../types/Route";
 import { useParams } from "react-router-dom";
+import { RoutesContext } from "../../context/route/routes-context";
+import RouteServices from "../../services/RouteServices";
 
 const MapEdit = () => {
-  const { info, points, getRoutesBtwPoints, map, drawLine } =
-    useContext(MapContext);
+  const { info, points, getPolyline, map } = useContext(MapContext);
+  const { routes, setRoutes } = useContext(RoutesContext);
   const { token } = useContext(UserContext);
   const [route, setRoute] = useState<Route>();
   const [coords, setCoords] = useState<any[] | undefined>([]);
@@ -53,20 +55,18 @@ const MapEdit = () => {
     setValue(route?.date);
     setUserId(route?.userId);
     if (route?.coordinates !== undefined) {
-      drawLine(map, route?.coordinates);
+      getPolyline(map, route?.coordinates);
     }
   }, [route]);
 
   useEffect(() => {
-
     //@ts-ignore
-    setCoords(points)
-    console.log(coords)
-  }, [points])
-  
+    setCoords(points);
+    console.log(coords);
+  }, [points]);
 
   const submitPostRoute = (route: any) => {
-    fetch(`http://localhost:3333/routes`, {
+    /*fetch(`http://localhost:3333/routes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +80,14 @@ const MapEdit = () => {
       } else if (res.status === 409) {
         console.log("Route already exists");
       }
-    });
+    });*/
+    RouteServices.update(id,route)
+    .then((res)=>{
+      if(res.status == 200){
+        alert("Route edited")
+        console.log("route edited")
+      }
+    })
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -90,11 +97,10 @@ const MapEdit = () => {
       return;
     }
     if (points?.length !== undefined) {
-      setCoords(points)
+      setCoords(points);
     }
     const route = {
-      //_id: id,
-      //userId: userId,
+      userId: userId,
       estimatedDuration: info?.min,
       name: name,
       description: description,
@@ -106,10 +112,6 @@ const MapEdit = () => {
     console.log(window.sessionStorage.getItem("token"));
   };
 
-  const handleRoute = () => {
-    if (coords !== undefined)
-      getRoutesBtwPoints(coords[0], coords[coords.length - 1]);
-  };
   return (
     <>
       {route === null ? (

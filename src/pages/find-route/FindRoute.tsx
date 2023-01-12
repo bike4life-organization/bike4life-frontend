@@ -1,42 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import RouteCard from "../../components/route-card/RouteCard";
 import "../../styles/find-route.scss";
 import { Route } from "../../types/Route";
 import dayjs from "dayjs";
-
-const routesMock = [
-  {
-    routeId: 1,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-  {
-    routeId: 2,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-  {
-    routeId: 3,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-  {
-    routeId: 4,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-  {
-    routeId: 5,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-];
+import RouteServices from '../../services/RouteServices'
+import { RoutesContext } from "../../context/route/routes-context";
 
 const FindRoute = () => {
-  const [routes, setRoutes] = useState<Route[]>();
+  const [routesState, setRoutesState] = useState<Route[]>();
+  const {routes, setRoutes} = useContext(RoutesContext)
 
   useEffect(() => {
-    fetch(`http://localhost:3333/routes/`, {
+    /*fetch(`http://localhost:3333/routes/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -44,7 +19,10 @@ const FindRoute = () => {
       },
     })
       .then((res) => res.json())
-      .then((res) => setRoutes(res));
+      .then((res) => setRoutes(res));*/
+      RouteServices.getAllRoutes()
+        .then((res) => setRoutes(res.data))
+        .catch(err => console.error(err))
   }, []);
 
   useEffect(() => {
@@ -55,13 +33,14 @@ const FindRoute = () => {
     */
   }, []);
 
+ 
+
   console.log(routes);
   return (
     <div className="find-route">
       <div className="find-route-container">
-        {routes?.map((e) => {
-          console.log(e.userId);
-          return <RouteCard key={e._id} route={e} userId={e.userId} />;
+        {routes?.map((e: any) => {
+          return <RouteCard key={e._id} route={e} userId={e.userId}/>;
         })}
       </div>
     </div>

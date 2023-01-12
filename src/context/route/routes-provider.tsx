@@ -6,7 +6,7 @@ export const createReducer =
   (state = defaultState, action: any) => {
     if (conditions[action.type]) {
       return conditions[action.type](state, action);
-    }
+    }   
     return state;
   };
 

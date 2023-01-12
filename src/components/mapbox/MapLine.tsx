@@ -8,7 +8,7 @@ import '../../styles/mapbox.scss'
 
 export const MapLine = () => {
   const { isLoading, userLocation } = useContext(PlacesContext);
-  const { setMap, getLine, drawLine, points} = useContext(MapContext);
+  const { setMap, getLine, drawLine, points, getLineEdit} = useContext(MapContext);
   const mapDiv = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {

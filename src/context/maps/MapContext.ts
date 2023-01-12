@@ -23,6 +23,8 @@ interface MapContextProps {
   setCoords: (map: Map) => void;
   getCustomRoute: (map: any) => void;
   drawLine: (map: Map, coord: any[]) => void;
+  getPolyline: (map: Map, coord: any[] ) => void
+  getLineEdit: (map: Map, coord: any[]) => void
 }
 
 export const MapContext = createContext({} as MapContextProps);
