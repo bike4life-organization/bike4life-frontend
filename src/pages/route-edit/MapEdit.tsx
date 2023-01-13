@@ -15,14 +15,13 @@ import { MapLine } from "../../components/mapbox/MapLineEdit";
 import { BtnMyLocation } from "../../components/mapbox";
 import Box from "@mui/material/Box";
 import { UserContext } from "../../context/user/UserContext";
-import DirectionsIcon from "@mui/icons-material/Directions";
 import { Route } from "../../types/Route";
 import { useParams } from "react-router-dom";
 import { RoutesContext } from "../../context/route/routes-context";
 import RouteServices from "../../services/RouteServices";
 
 const MapEdit = () => {
-  const { info, points, getPolyline, map } = useContext(MapContext);
+  const { info, points, getPolyline,getLineEdit, map } = useContext(MapContext);
   const { token } = useContext(UserContext);
   const [route, setRoute] = useState<Route>();
   const [coords, setCoords] = useState<any[] | undefined>([]);
@@ -31,7 +30,7 @@ const MapEdit = () => {
   const [description, setDescription] = useState<string | undefined>("");
   const [value, setValue] = useState<
     string | number | Date | dayjs.Dayjs | null | undefined
-  >(dayjs("2022-04-07"));
+  >(dayjs("2023-01-01"));
   const theme = createTheme();
   const { id } = useParams();
 
@@ -54,7 +53,7 @@ const MapEdit = () => {
     setValue(route?.date);
     setUserId(route?.userId);
     if (route?.coordinates !== undefined) {
-      getPolyline(map, route?.coordinates);
+      getLineEdit(map, route?.coordinates);
     }
   }, [route]);
 
@@ -96,7 +95,7 @@ const MapEdit = () => {
   return (
     <>
       {route === null ? (
-        <h1 style={{ marginTop: "300px" }}>Cargando</h1>
+        <h1 style={{ marginTop: "300px" }}>Loading...</h1>
       ) : (
         <div>
           <ThemeProvider theme={theme}>

@@ -9,6 +9,7 @@ interface MapContextProps {
   marker?: Map;
   points?: any[] | undefined;
   markers?: any[];
+  geojson? : any;
   info?: { min: number; km: number };
 
   //Methods

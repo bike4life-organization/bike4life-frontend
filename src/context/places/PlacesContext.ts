@@ -8,8 +8,6 @@ export interface PlacesContextProps {
     places: Feature[];
     customLocation?: [number, number];
 
-    //Methods
-    searchPlacesByTerm: (query: string) => Promise<Feature[]>
 }
 
 

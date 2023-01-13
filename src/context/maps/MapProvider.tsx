@@ -16,6 +16,7 @@ export interface MapState {
   minuts: number;
   marker?: [number, number];
   points?: any[];
+  geojson?: any;
   info: { min: number; km: number };
 }
 
@@ -86,13 +87,10 @@ export const MapProvider = ({ children }: Props) => {
 
   const getLine = (map: Map) => {
     let listOfCoords: any[] = [];
-    // GeoJSON object to hold our measurement features
     const geojson: any = {
       type: "FeatureCollection",
       features: [],
     };
-
-    // Used to draw a line between points
     const linestring = {
       type: "Feature",
       geometry: {
@@ -106,14 +104,12 @@ export const MapProvider = ({ children }: Props) => {
         type: "geojson",
         data: geojson,
       });
-
-      // Add styles to the map
       map.addLayer({
         id: "measure-points",
         type: "circle",
         source: "geojson",
         paint: {
-          "circle-radius": 7,
+          "circle-radius": 5,
           "circle-color": "#000",
         },
         filter: ["in", "$type", "Point"],
@@ -137,14 +133,7 @@ export const MapProvider = ({ children }: Props) => {
         const features = map.queryRenderedFeatures(e.point, {
           layers: ["measure-points"],
         });
-
-        // Remove the linestring from the group
-        // so we can redraw it based on the points collection.
         if (geojson.features.length > 1) geojson.features.pop();
-
-        // Clear the distance container to populate it with a new value.
-
-        // If a feature was clicked, remove it from the map.
         if (features.length) {
           const id = features[0].properties.id;
           geojson.features = geojson.features.filter(
@@ -161,26 +150,23 @@ export const MapProvider = ({ children }: Props) => {
               id: String(new Date().getTime()),
             },
           };
-
           geojson.features.push(point);
         }
-
         if (geojson.features.length > 1) {
           linestring.geometry.coordinates = geojson.features.map(
             (point: any) => point.geometry.coordinates
           );
-
           geojson.features.push(linestring);
-          //listOfCoords.push();
-          //console.log(geojson.features)
           listOfCoords = linestring.geometry.coordinates;
-          console.log(listOfCoords);
+          dispatch({ type: "setGeojson", payload: geojson });
           dispatch({ type: "setPoints", payload: listOfCoords });
+
           if (listOfCoords.length >= 2) {
             getInfo(listOfCoords[0], listOfCoords[listOfCoords.length - 1]);
           }
-          // Populate the distanceContainer with total distance
         }
+
+        console.log(geojson);
         map.getSource("geojson").setData(geojson);
       });
     });
@@ -189,8 +175,6 @@ export const MapProvider = ({ children }: Props) => {
       const features = map.queryRenderedFeatures(e.point, {
         layers: ["measure-points"],
       });
-      // Change the cursor to a pointer when hovering over a point on the map.
-      // Otherwise cursor is a crosshair.
       map.getCanvas().style.cursor = features.length ? "pointer" : "crosshair";
     });
   };
@@ -233,7 +217,7 @@ export const MapProvider = ({ children }: Props) => {
     });
   };
 
-  const getPolyline = (map: Map, coord: any[]|undefined)=>{
+  const getPolyline = (map: Map, coord: any[] | undefined) => {
     const geojson: any = {
       type: "FeatureCollection",
       features: [],
@@ -251,7 +235,7 @@ export const MapProvider = ({ children }: Props) => {
         type: "geojson",
         data: geojson,
       });
-    
+
       map.addLayer({
         id: "points",
         type: "circle",
@@ -277,7 +261,7 @@ export const MapProvider = ({ children }: Props) => {
         filter: ["in", "$type", "LineString"],
       });
 
-      const pointsLayers = coord?.map((point: any) =>{
+      const pointsLayers = coord?.map((point: any) => {
         const p: any = {
           type: "Feature",
           geometry: {
@@ -288,44 +272,75 @@ export const MapProvider = ({ children }: Props) => {
             id: String(new Date().getTime()),
           },
         };
-
         geojson.features.push(p);
-      })
-        geojson.features.push(linestring);
+      });
+      console.log(pointsLayers);
+      geojson.features.push(linestring);
       map.getSource("georoute").setData(geojson);
-    })
-  }
+    });
+  };
 
-  const getLineEdit = (map: Map, coord:any[]) => {
-    let listOfCoords: any[] = [];
-    // GeoJSON object to hold our measurement features
+  const getGeojson = (coord: any[]) => {
     const geojson: any = {
       type: "FeatureCollection",
       features: [],
     };
 
-    // Used to draw a line between points
     const linestring = {
       type: "Feature",
       geometry: {
         type: "LineString",
-        coordinates: [],
+        coordinates: coord,
       },
     };
-    geojson.features.push(linestring)
+    for (let index = 0; index < coord.length; index++) {
+      const point = {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: coord[index],
+        },
+        properties: {
+          id: String(new Date().getTime() * Math.random()),
+        },
+      };
+      geojson.features.push(point);
+    }
+    geojson.features.push(linestring);
+    console.log(geojson)
+    return geojson
+  };
+
+  const getLineEdit = (map: Map, coord: any[]) => {
+    let listOfCoords: any[] = [];
+    
+    let info = getGeojson(coord)
+    let features = map.queryRenderedFeatures(info.features[info.features.length], {
+      layers: ["measure-points"],
+    });
+    const geojson: any = {
+      type: "FeatureCollection",
+      features: info.features,
+    };
+    const linestring = {
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates: coord,
+      },
+    };
+
     map.on("load", () => {
       map.addSource("geojson", {
         type: "geojson",
         data: geojson,
       });
-
-      // Add styles to the map
       map.addLayer({
         id: "measure-points",
         type: "circle",
         source: "geojson",
         paint: {
-          "circle-radius": 7,
+          "circle-radius": 5,
           "circle-color": "#000",
         },
         filter: ["in", "$type", "Point"],
@@ -345,29 +360,11 @@ export const MapProvider = ({ children }: Props) => {
         filter: ["in", "$type", "LineString"],
       });
 
-      
-      const pointsLayers = coord?.map((point: any) =>{
-        const p: any = {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [point[0], point[1]],
-          },
-          properties: {
-            id: String(new Date().getTime()),
-          },
-        };
-
-        geojson.features.push(p);
-      })
-
       map.on("click", (e: any) => {
         const features = map.queryRenderedFeatures(e.point, {
           layers: ["measure-points"],
         });
-
-
-        // If a feature was clicked, remove it from the map.
+        if (geojson.features.length > 1) geojson.features.pop();
         if (features.length) {
           const id = features[0].properties.id;
           geojson.features = geojson.features.filter(
@@ -384,26 +381,23 @@ export const MapProvider = ({ children }: Props) => {
               id: String(new Date().getTime()),
             },
           };
-
           geojson.features.push(point);
         }
-
         if (geojson.features.length > 1) {
+          console.log(geojson.features)
           linestring.geometry.coordinates = geojson.features.map(
             (point: any) => point.geometry.coordinates
           );
-
           geojson.features.push(linestring);
-          //listOfCoords.push();
-          //console.log(geojson.features)
           listOfCoords = linestring.geometry.coordinates;
-          console.log(listOfCoords);
+          dispatch({ type: "setGeojson", payload: geojson });
           dispatch({ type: "setPoints", payload: listOfCoords });
+
           if (listOfCoords.length >= 2) {
             getInfo(listOfCoords[0], listOfCoords[listOfCoords.length - 1]);
           }
-          // Populate the distanceContainer with total distance
         }
+        console.log(geojson);
         map.getSource("geojson").setData(geojson);
       });
     });
@@ -412,8 +406,6 @@ export const MapProvider = ({ children }: Props) => {
       const features = map.queryRenderedFeatures(e.point, {
         layers: ["measure-points"],
       });
-      // Change the cursor to a pointer when hovering over a point on the map.
-      // Otherwise cursor is a crosshair.
       map.getCanvas().style.cursor = features.length ? "pointer" : "crosshair";
     });
   };
@@ -452,7 +444,7 @@ export const MapProvider = ({ children }: Props) => {
         setCoords,
         drawLine,
         getPolyline,
-        getLineEdit
+        getLineEdit,
       }}
     >
       {children}
