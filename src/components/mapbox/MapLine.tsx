@@ -4,11 +4,12 @@ import { MapContext, PlacesContext } from "../../context";
 import { Loading } from "./";
 //@ts-ignore
 import mapboxgl from "!mapbox-gl";
-import '../../styles/mapbox.scss'
+import "../../styles/mapbox.scss";
 
 export const MapLine = () => {
   const { isLoading, userLocation } = useContext(PlacesContext);
-  const { setMap, getLine, drawLine, points, getLineEdit} = useContext(MapContext);
+  const { setMap, getLine, drawLine, points, getLineEdit } =
+    useContext(MapContext);
   const mapDiv = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -19,7 +20,6 @@ export const MapLine = () => {
         center: userLocation, // starting position [lng, lat]
         zoom: 14, // starting zoom
       });
-      //@ts-ignore
       setMap(map);
       getLine(map);
     }
@@ -29,12 +29,11 @@ export const MapLine = () => {
     return <Loading />;
   }
 
-
   return (
     <div>
       <div
         ref={mapDiv}
-        className = "mapbox-container"
+        className="mapbox-container"
         style={{
           height: "100vh",
           position: "relative",

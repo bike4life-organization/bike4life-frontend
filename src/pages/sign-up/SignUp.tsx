@@ -12,6 +12,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {useState} from 'react';
 
 function Copyright(props: any) {
   return (
@@ -34,8 +35,10 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const [message, setMessage] = useState("") 
+  const [classSpan, setClassSpan] = useState("default") 
   const submitSignUp = (user: any) => {
-    fetch(`http://localhost:3334/users`, {
+    fetch(`${process.env.REACT_APP_AUTH_API_URL}/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -44,8 +47,10 @@ export default function SignUp() {
     }).then((res) => {
       if (res.status === 201) {
         console.log("User created");
+        setMessage("User created")
       } else if (res.status === 409) {
         console.log("User already exists");
+        setMessage("User already exists")
       }
     });
   };
@@ -129,6 +134,9 @@ export default function SignUp() {
                   autoComplete="new-password"
                 />
               </Grid>
+              <div className={classSpan} style = {{display: "flex", justifyContent: "center", textAlign: "center"}}>
+               {(classSpan === "success") ? <span>{message}</span> : <span>{message}</span>}
+              </div>
               <Grid item xs={12}>
                 <FormControlLabel
                   control={

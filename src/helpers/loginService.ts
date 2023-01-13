@@ -1,5 +1,4 @@
-const ENDPOINT = "http://localhost:3334/users"
-
+const ENDPOINT = `${process.env.REACT_APP_AUTH_API_URL}/users`
 
   export default function submitLogin(user: any){
     return fetch(`${ENDPOINT}/login`, {

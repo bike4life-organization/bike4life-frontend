@@ -58,34 +58,6 @@ useEffect(() => {
     console.log(user)
     loggin(user.email, user.password)
   };
-/*
-  const submitLogin = async (user: any) => {
-    fetch(`http://localhost:3334/users/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    }).then((res) => {
-      if (res.status === 200) {
-        console.log("User logged in");
-        console.log(res.json())
-        return res.json()
-      } else if (res.status === 409) {
-        console.log("User already logged in");
-        
-      }else if(res.status == 404){
-       console.log("User not foud")
-      }else{
-        console.log(res.status)
-      }
-    }).then(res=>{
-      const {token} = res
-      return token
-    });
-  };
-*/
-
 
   return (
     <ThemeProvider theme={theme}>

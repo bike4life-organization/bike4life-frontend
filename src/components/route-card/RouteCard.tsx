@@ -9,28 +9,15 @@ import { Link } from "react-router-dom";
 import RouteServices from "../../services/RouteServices";
 import { RoutesContext } from "../../context/route/routes-context";
 
-
 const RouteCard = ({ route }: any) => {
   const { routes, setRoutes } = useContext(RoutesContext);
-  /**
-   *
-   * const deleteHandler = (routeId) => {
-   *  deleteRoute(routeId)
-   *      .then(res => console.log(res))
-   *      .catch(err => console.error(err));
-   *      .finally(() => getAllRoutes())
-   * }
-   */
-
-  const deleteHandler = (routeId : any) => {
-    RouteServices.remove(routeId)
-    .then((res)=> {
-      if(res.data == "OK"){
-        const newRoutes = routes?.filter((route: any) => route._id !== routeId)
-        setRoutes(newRoutes)
+  const deleteHandler = (routeId: any) => {
+    RouteServices.remove(routeId).then((res) => {
+      if (res.data == "OK") {
+        const newRoutes = routes?.filter((route: any) => route._id !== routeId);
+        setRoutes(newRoutes);
       }
-    })
-
+    });
   };
   console.log(route._id);
   return (

@@ -13,15 +13,9 @@ interface MapContextProps {
 
   //Methods
   setMap: (map: Map) => void;
-  getRoutesBtwPoints: (
-    start: [number, number],
-    end: [number, number]
-  ) => Promise<void>;
-  addMarker: (map: Map) => void;
   getInfo: (start: [number, number], end: [number, number]) => Promise<void>;
   getLine: (map: Map) => void;
   setCoords: (map: Map) => void;
-  getCustomRoute: (map: any) => void;
   drawLine: (map: Map, coord: any[]) => void;
   getPolyline: (map: Map, coord: any[] ) => void
   getLineEdit: (map: Map, coord: any[]) => void

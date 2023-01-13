@@ -2,13 +2,13 @@ import axios from "axios";
 
 
 const directionsApi = axios.create({
-    baseURL: "https://api.mapbox.com/directions/v5/mapbox/cycling",
+    baseURL: `${process.env.REACT_APP_BASE_URL}`,
     params:{
         alternatives: false,
         geometries: 'geojson',
         overview: 'simplified',
         steps: false, 
-        access_token: 'pk.eyJ1IjoibWFudWVsMTk5NiIsImEiOiJjbGM2a3F0cmgxMTk1M25taDY4bm5vcmtpIn0.hBrgg-zNkvsWEKHG0LHseQ'
+        access_token: `${process.env.REACT_APP_ACCESS_TOKEN}`
     }
 })
 

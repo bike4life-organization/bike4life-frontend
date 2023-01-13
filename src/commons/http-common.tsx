@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const BASE_URL = "http://localhost:3333/routes";
+const BASE_URL = `${process.env.REACT_APP_ROUTE_API_URL}/routes`;
 const validToken = window.sessionStorage.getItem("token");
 
 export default axios.create({

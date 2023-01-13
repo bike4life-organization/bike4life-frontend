@@ -1,7 +1,7 @@
 /* eslint import/no-webpack-loader-syntax: off */
 import { useReducer, useContext, useEffect, useState } from "react";
 //@ts-ignore
-import { AnySourceData, LngLatBounds, Map, Marker, Popup } from "!mapbox-gl";
+import { Map, Marker, Popup } from "!mapbox-gl";
 import { MapContext } from "./MapContext";
 import { mapReducer } from "./MapReducer";
 import { PlacesContext } from "../places/PlacesContext";
@@ -82,173 +82,6 @@ export const MapProvider = ({ children }: Props) => {
       .addTo(map);
 
     dispatch({ type: "setMap", payload: map });
-  };
-
-  const addMarker = (map: Map) => {
-    map.on("click", (e: any) => {
-      //console.log(`A click event has occurred at ${e.lngLat.lat}`)
-      //const result: any[] = e.lngLat
-      const coords: any = Object.keys(e.lngLat).map((key) => e.lngLat[key]);
-      const end = {
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            properties: {},
-            geometry: {
-              type: "Point",
-              coordinates: coords,
-            },
-          },
-        ],
-      };
-
-      if (map.getLayer("end")) {
-        map.getSource("end").setData(end);
-      } else
-        map.addLayer({
-          id: `end`,
-          type: "circle",
-          source: {
-            type: "geojson",
-            data: {
-              type: "FeatureCollection",
-              features: [
-                {
-                  type: "Feature",
-                  properties: {},
-                  geometry: {
-                    type: "Point",
-                    coordinates: coords,
-                  },
-                },
-              ],
-            },
-          },
-          paint: {
-            "circle-radius": 10,
-            "circle-color": "#f30",
-          },
-        });
-      setMarker([e.lngLat.lng, e.lngLat.lat]);
-    });
-  };
-
-  const getCustomRoute = (map: any) => {
-    let puntos: any[] = [];
-    //@ts-ignore
-    map.on("click", (event) => {
-      const coords: any = Object.keys(event.lngLat).map(
-        (key) => event.lngLat[key]
-      );
-      const startCoord = {
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            properties: {},
-            geometry: {
-              type: "Point",
-              coordinates: coords,
-            },
-          },
-        ],
-      };
-      setMarker(coords);
-      console.log(coords);
-      if (puntos.length >= 2) return;
-      puntos.push(coords);
-
-      if (map.getLayer(`${coords[0]}${coords[1]}`)) {
-        map.getSource(`${coords[0]}${coords[1]}`).setData(startCoord);
-      } else {
-        map.addLayer({
-          id: `${coords[0]}${coords[1]}`,
-          type: "circle",
-          source: {
-            type: "geojson",
-            data: {
-              type: "FeatureCollection",
-              features: [
-                {
-                  type: "Feature",
-                  properties: {},
-                  geometry: {
-                    type: "Point",
-                    coordinates: coords,
-                  },
-                },
-              ],
-            },
-          },
-          paint: {
-            "circle-radius": 10,
-            "circle-color": "#f30",
-          },
-        });
-      }
-    });
-    dispatch({ type: "setPoints", payload: puntos });
-  };
-
-  const getRoutesBtwPoints = async (
-    start: [number, number],
-    end: [number, number]
-  ) => {
-    const resp = await directionsApi.get<DirectionsResponse>(
-      `/${start.join(",")};${end.join(",")}`
-    );
-    const { distance, duration, geometry } = resp.data.routes[0];
-    const { coordinates: coords } = geometry;
-    let kms = distance / 1000;
-    kms = Math.round(kms * 100);
-    kms /= 100;
-    const minuts = Math.floor(duration / 60);
-    const bounds = new LngLatBounds(start, start);
-    for (const coord of coords) {
-      const newCoord: [number, number] = [coord[0], coord[1]];
-      bounds.extend(newCoord);
-    }
-    state.map?.fitBounds(bounds, {
-      padding: 100,
-    });
-    const sourceData: AnySourceData = {
-      type: "geojson",
-      data: {
-        type: "FeatureCollection",
-        features: [
-          {
-            type: "Feature",
-            properties: {},
-            geometry: {
-              type: "LineString",
-              coordinates: coords,
-            },
-          },
-        ],
-      },
-    };
-
-    //Remover Polyline si existe
-    if (state.map?.getLayer("RouteString")) {
-      state.map.removeLayer("RouteString");
-      state.map.removeSource("RouteString");
-    }
-
-    state.map?.addSource("RouteString", sourceData);
-    state.map?.addLayer({
-      id: "RouteString",
-      type: "line",
-      source: "RouteString",
-      layout: {
-        "line-cap": "round",
-        "line-join": "round",
-      },
-      paint: {
-        "line-color": "blue",
-        "line-width": 3,
-      },
-    });
   };
 
   const getLine = (map: Map) => {
@@ -614,12 +447,9 @@ export const MapProvider = ({ children }: Props) => {
         ...state,
         //Methods
         setMap,
-        getRoutesBtwPoints,
-        addMarker,
         getInfo,
         getLine,
         setCoords,
-        getCustomRoute,
         drawLine,
         getPolyline,
         getLineEdit

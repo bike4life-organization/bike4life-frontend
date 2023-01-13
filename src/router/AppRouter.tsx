@@ -38,10 +38,6 @@ const AppRouter = () => {
       element: <Home />,
     },
     {
-      path: "/pricing",
-      element: <Pricing />,
-    },
-    {
       path: "/routes",
       element: <FindRoute />,
     },

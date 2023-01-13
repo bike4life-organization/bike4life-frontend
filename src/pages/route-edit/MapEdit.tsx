@@ -23,7 +23,6 @@ import RouteServices from "../../services/RouteServices";
 
 const MapEdit = () => {
   const { info, points, getPolyline, map } = useContext(MapContext);
-  const { routes, setRoutes } = useContext(RoutesContext);
   const { token } = useContext(UserContext);
   const [route, setRoute] = useState<Route>();
   const [coords, setCoords] = useState<any[] | undefined>([]);
@@ -37,7 +36,7 @@ const MapEdit = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://localhost:3333/routes/${id}`, {
+    fetch(`${process.env.REACT_APP_ROUTE_API_URL}/routes/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -60,34 +59,16 @@ const MapEdit = () => {
   }, [route]);
 
   useEffect(() => {
-    //@ts-ignore
     setCoords(points);
-    console.log(coords);
   }, [points]);
 
   const submitPostRoute = (route: any) => {
-    /*fetch(`http://localhost:3333/routes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(route),
-    }).then((res) => {
-      if (res.status === 200) {
-        console.log("Route Created");
-        alert("Route Created");
-      } else if (res.status === 409) {
-        console.log("Route already exists");
+    RouteServices.update(id, route).then((res) => {
+      if (res.status == 200) {
+        alert("Route edited");
+        console.log("route edited");
       }
-    });*/
-    RouteServices.update(id,route)
-    .then((res)=>{
-      if(res.status == 200){
-        alert("Route edited")
-        console.log("route edited")
-      }
-    })
+    });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

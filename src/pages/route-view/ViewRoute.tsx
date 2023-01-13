@@ -15,12 +15,11 @@ import { MapLine } from "../../components/mapbox/MapLineEdit";
 import { BtnMyLocation } from "../../components/mapbox";
 import Box from "@mui/material/Box";
 import { UserContext } from "../../context/user/UserContext";
-import DirectionsIcon from "@mui/icons-material/Directions";
 import { Route } from "../../types/Route";
 import { useParams } from "react-router-dom";
 
 const ViewRoute = () => {
-  const { info, points, getRoutesBtwPoints, map, drawLine, getPolyline } =
+  const { info, points, map, drawLine, getPolyline } =
     useContext(MapContext);
   const { token } = useContext(UserContext);
   const [route, setRoute] = useState<Route>();
@@ -57,47 +56,6 @@ const ViewRoute = () => {
     }
   }, [route]);
 
-  const submitPostRoute = (route: any) => {
-    /*fetch(`http://localhost:3333/routes`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(route),
-    }).then((res) => {
-      if (res.status === 200) {
-        console.log("Route Created");
-        alert("Route Created");
-      } else if (res.status === 409) {
-        console.log("Route already exists");
-      }
-    });*/
-    
-  };
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (points?.length == undefined && coords?.length == undefined) {
-      return;
-    }
-    if (points?.length !== undefined) {
-      setCoords(points);
-    }
-    const route = {
-      //_id: id,
-      //userId: userId,
-      estimatedDuration: info?.min,
-      name: name,
-      description: description,
-      date: value,
-      coordinates: coords,
-    };
-    console.log(route);
-    submitPostRoute(route);
-    console.log(window.sessionStorage.getItem("token"));
-  };
-
   return (
     <>
       {route === null ? (
@@ -110,7 +68,6 @@ const ViewRoute = () => {
                 <Box
                   component="form"
                   noValidate
-                  onSubmit={handleSubmit}
                   sx={{ mt: 3 }}
                 >
                   <div className="new-route">

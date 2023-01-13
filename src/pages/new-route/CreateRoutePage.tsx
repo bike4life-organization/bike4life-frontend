@@ -23,7 +23,7 @@ const CreateRoute = () => {
   const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-07"));
 
   const submitPostRoute = (route: any) => {
-    fetch(`http://localhost:3333/routes`, {
+    fetch(`${process.env.REACT_APP_ROUTE_API_URL}/routes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

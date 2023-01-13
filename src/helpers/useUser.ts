@@ -3,7 +3,6 @@ import {UserContext} from '../context/user/UserContext';
 import loginService from '../helpers/loginService'
 export default function useUser(){
     const {token, setToken} = useContext(UserContext)
-    const [isLogged, setIsLogged] = useState(false)
 
     const loggin = useCallback((email: any, password: any) =>{
         loginService({email,password})
