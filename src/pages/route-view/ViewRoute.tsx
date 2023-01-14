@@ -34,7 +34,7 @@ const ViewRoute = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`http://localhost:3333/routes/${id}`, {
+    fetch(`${process.env.REACT_APP_ROUTE_API_URL}/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
