@@ -2,6 +2,8 @@
 //@ts-ignore
 import { Map } from "!mapbox-gl";
 import { createContext } from "react";
+import { InterestingPlaces } from "../../types/Route";
+
 
 interface MapContextProps {
   isMapReady: boolean;
@@ -20,6 +22,7 @@ interface MapContextProps {
   drawLine: (map: Map, coord: any[]) => void;
   getPolyline: (map: Map, coord: any[] ) => void
   getLineEdit: (map: Map, coord: any[]) => void
+  showPlaces: (map: Map, InterestingPlaces: InterestingPlaces[]) => void
 }
 
 export const MapContext = createContext({} as MapContextProps);

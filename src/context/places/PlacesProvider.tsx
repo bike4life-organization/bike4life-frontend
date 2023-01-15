@@ -36,10 +36,12 @@ export const PlacesProvider = ({children}:Props) => {
     
 
 
-  
+
+ 
     return (
     <PlacesContext.Provider value={{
         ...state,
+ 
     }}>
         {children}
     </PlacesContext.Provider>

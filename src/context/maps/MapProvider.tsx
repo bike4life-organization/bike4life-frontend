@@ -7,6 +7,7 @@ import { mapReducer } from "./MapReducer";
 import { PlacesContext } from "../places/PlacesContext";
 import directionsApi from "../../apis/DirectionsApi";
 import { DirectionsResponse } from "../../interfaces/directions";
+import { InterestingPlaces } from "../../types/Route";
 
 export interface MapState {
   isMapReady: boolean;
@@ -40,26 +41,7 @@ export const MapProvider = ({ children }: Props) => {
   const { places } = useContext(PlacesContext);
   const [marker, setMarker] = useState<number[]>([0, 0]);
 
-  useEffect(() => {
-    state.markers.forEach((marker) => marker.remove());
-    const newMarkers: Marker[] = [];
-
-    for (const place of places) {
-      const [lon, lat] = place.center;
-      const popup = new Popup().setHTML(`
-                <h6>${place.place_name}</h6>
-                <p>${place.text}</p>
-                `);
-      const newMarker = new Marker()
-        .setPopup(popup)
-        .setLngLat([lon, lat])
-        .addTo(state.map!);
-      newMarkers.push(newMarker);
-    }
-    //limpiar polyline
-    dispatch({ type: "setMarkers", payload: newMarkers });
-    //@ts-ignore
-  }, [places]);
+ 
 
   useEffect(() => {
     if (state.marker) {
@@ -274,7 +256,6 @@ export const MapProvider = ({ children }: Props) => {
         };
         geojson.features.push(p);
       });
-      console.log(pointsLayers);
       geojson.features.push(linestring);
       map.getSource("georoute").setData(geojson);
     });
@@ -428,6 +409,23 @@ export const MapProvider = ({ children }: Props) => {
     dispatch({ type: "setPoints", payload: points });
   };
 
+  const showPlaces = (map: Map, places: InterestingPlaces[]) => {
+    
+    console.log(places)
+    for (let index = 0; index < places.length; index++) {
+      const myPlacePopUp = new Popup().setHTML(`
+            <p>${places[index].name}<p>
+            `);
+      console.log(places[index].point.lon)
+      new Marker()
+      .setLngLat([places[index].point.lat,places[index].point.lon ])
+      .setPopup(myPlacePopUp)
+      .addTo(map);
+    }
+    dispatch({ type: "setMap", payload: map });
+    
+  }
+
   if (state.map?.getLayer("RouteString")) {
     state.map.removeLayer("RouteString");
     state.map.removeSource("RouteString");
@@ -445,6 +443,7 @@ export const MapProvider = ({ children }: Props) => {
         drawLine,
         getPolyline,
         getLineEdit,
+        showPlaces
       }}
     >
       {children}

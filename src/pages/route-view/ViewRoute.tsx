@@ -17,9 +17,10 @@ import Box from "@mui/material/Box";
 import { UserContext } from "../../context/user/UserContext";
 import { Route } from "../../types/Route";
 import { useParams } from "react-router-dom";
+import { PlacesContext } from '../../context/places/PlacesContext';
 
 const ViewRoute = () => {
-  const { info, points, map, drawLine, getPolyline } =
+  const { info, points, map, drawLine, getPolyline, showPlaces } =
     useContext(MapContext);
   const { token } = useContext(UserContext);
   const [route, setRoute] = useState<Route>();
@@ -34,7 +35,7 @@ const ViewRoute = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_ROUTE_API_URL}/${id}`, {
+    fetch(`${process.env.REACT_APP_ROUTE_API_URL}/routes/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -51,8 +52,10 @@ const ViewRoute = () => {
     setDescription(route?.description);
     setValue(route?.date);
     setUserId(route?.userId);
-    if (route?.coordinates !== undefined) {
+    console.log(route?.interestingPlaces)
+    if (route?.coordinates !== undefined && route.interestingPlaces !== undefined) {
       getPolyline(map, route?.coordinates);
+      showPlaces(map, route.interestingPlaces)
     }
   }, [route]);
 
