@@ -41,7 +41,7 @@ export const MapProvider = ({ children }: Props) => {
   const { places } = useContext(PlacesContext);
   const [marker, setMarker] = useState<number[]>([0, 0]);
 
- 
+
 
   useEffect(() => {
     if (state.marker) {
@@ -162,6 +162,7 @@ export const MapProvider = ({ children }: Props) => {
   };
 
   const drawLine = (map: Map, coord: any[] | undefined) => {
+    if(!map) return;
     map.on("load", () => {
       map.addSource("route", {
         type: "geojson",
@@ -200,6 +201,7 @@ export const MapProvider = ({ children }: Props) => {
   };
 
   const getPolyline = (map: Map, coord: any[] | undefined) => {
+    if(!map) return;
     const geojson: any = {
       type: "FeatureCollection",
       features: [],
@@ -293,8 +295,9 @@ export const MapProvider = ({ children }: Props) => {
   };
 
   const getLineEdit = (map: Map, coord: any[]) => {
+    if(!map) return;
     let listOfCoords: any[] = [];
-    
+
     let info = getGeojson(coord)
     let features = map.queryRenderedFeatures(info.features[info.features.length], {
       layers: ["measure-points"],
@@ -410,20 +413,18 @@ export const MapProvider = ({ children }: Props) => {
   };
 
   const showPlaces = (map: Map, places: InterestingPlaces[]) => {
-    
-    console.log(places)
+    if(!map) return;
     for (let index = 0; index < places.length; index++) {
       const myPlacePopUp = new Popup().setHTML(`
             <p>${places[index].name}<p>
             `);
-      console.log(places[index].point.lon)
       new Marker()
-      .setLngLat([places[index].point.lat,places[index].point.lon ])
+      .setLngLat([places[index].point.lon,places[index].point.lat ])
       .setPopup(myPlacePopUp)
       .addTo(map);
     }
     dispatch({ type: "setMap", payload: map });
-    
+
   }
 
   if (state.map?.getLayer("RouteString")) {
