@@ -1,0 +1,17 @@
+//spacing
+$spacing-md: 16px;
+$spacing-lg: 32px;
+
+//border-radius
+$border-radius:12px;
+
+
+
+@mixin breakpoint($point){
+    @if $point == md{
+        //768px
+        @media (min-width: 48em){
+            @content;
+        }
+    }
+}

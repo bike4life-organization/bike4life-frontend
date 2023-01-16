@@ -1,20 +1,45 @@
-import Link from '@mui/material/Link';
-import '../../styles/header.scss';
+import React from "react";
+import useUser from "../../helpers/useUser";
+import Link from "@mui/material/Link";
+import "../../styles/header.scss";
 
 const Header = () => {
- 
-  return (
-    <div className='header'>
-        <div className="left">
-            <img alt="logo" src="../../assets/img/logo-bike4life.png" />
-            <Link underline='none' href='/routes'>Find a route!</Link>
-            <Link underline='none' href='/create-route'>Create a route!</Link>
-        </div>
-        <div className="right">
-            <Link underline='none' href='/sign-up'>Sign up</Link>
-        </div>
-    </div>
-  )
-}
+  const { loggout } = useUser();
 
-export default Header
+  return (
+    <nav className="header">
+      <div className="left">
+        <Link underline="none" href="/home">
+          <img alt="logo" src="../../assets/img/logo-bike4life.png"></img>
+        </Link>
+      </div>
+      <div className="right">
+        {window.sessionStorage.getItem("token") ? (
+          <>
+            {" "}
+            <Link underline="none" href="/routes">
+              Find a route!
+            </Link>
+            <Link underline="none" href="/create-route">
+              Create a route!
+            </Link>
+            <Link underline="none" href="/login" onClick={loggout}>
+              Logout
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link underline="none" href="/login">
+              Sign in
+            </Link>
+            <Link underline="none" href="/sign-up">
+              Sign up
+            </Link>
+          </>
+        )}
+      </div>
+    </nav>
+  );
+};
+
+export default Header;

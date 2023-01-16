@@ -1,60 +1,28 @@
-import React, {useState, useEffect} from 'react'
-import RouteCard from '../../components/route-card/RouteCard';
-import '../../styles/find-route.scss';
-
-const routesMock = [
-  {
-    routeId: 1,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-  {
-    routeId: 2,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-  {
-    routeId: 3,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-  {
-    routeId: 4,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-  {
-    routeId: 5,
-    name: "Salida con los chabales",
-    description: "hola",
-  },
-]
+import React, { useEffect, useContext } from "react";
+import RouteCard from "../../components/route-card/RouteCard";
+import "../../styles/find-route.scss";
+import RouteServices from '../../services/RouteServices'
+import { RoutesContext } from "../../context/route/routes-context";
 
 const FindRoute = () => {
-
-  const [routes, setRoutes] = useState(routesMock);
+  const {routes, setRoutes} = useContext(RoutesContext)
 
   useEffect(() => {
-    //llamar a la api
-    /*getAllRoutes()
-      .then(result => setRoutes(result))
-      .catch(err => console.error(err);
-    */
-  }, [])
-  
+      RouteServices.getAllRoutes()
+        .then((res) => setRoutes(res.data))
+        .catch(err => console.error(err))
+  }, []);
 
-
+  console.log(routes);
   return (
-    <div className='find-route'>
+    <div className="find-route">
       <div className="find-route-container">
-        {
-          routes.map((e, index) => {
-            return <RouteCard key={index} route={e} />
-          })
-        }
+        {routes?.map((e: any) => {
+          return <RouteCard key={e._id} route={e} userId={e.userId}/>;
+        })}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FindRoute
+export default FindRoute;
