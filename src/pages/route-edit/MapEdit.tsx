@@ -19,6 +19,7 @@ import { Route } from "../../types/Route";
 import { useParams } from "react-router-dom";
 import { RoutesContext } from "../../context/route/routes-context";
 import RouteServices from "../../services/RouteServices";
+import {toast} from "react-toastify";
 
 const MapEdit = () => {
   const { info, points, getPolyline,getLineEdit, map } = useContext(MapContext);
@@ -64,8 +65,9 @@ const MapEdit = () => {
   const submitPostRoute = (route: any) => {
     RouteServices.update(id, route).then((res) => {
       if (res.status == 200) {
-        alert("Route edited");
-        console.log("route edited");
+        toast.success('Route updated', {
+          position: toast.POSITION.TOP_RIGHT
+        });
       }
     });
   };
@@ -77,6 +79,9 @@ const MapEdit = () => {
       return;
     }
     if (points?.length !== undefined) {
+      toast.warn('Configure your route on the map', {
+          position: toast.POSITION.TOP_RIGHT
+      });
       setCoords(points);
     }
     const route = {
@@ -112,7 +117,7 @@ const MapEdit = () => {
                       <DirectionsBikeIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                      Edit route!
+                      Update route
                     </Typography>
                     <div className="row">
                       <TextField
@@ -156,7 +161,7 @@ const MapEdit = () => {
                       variant="contained"
                       sx={{ mt: 3, mb: 2 }}
                     >
-                      Send
+                      Update
                     </Button>
                   </div>
                 </Box>

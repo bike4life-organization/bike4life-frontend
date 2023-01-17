@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -12,7 +10,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import {useState} from 'react';
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 function Copyright(props: any) {
   return (
@@ -23,8 +22,8 @@ function Copyright(props: any) {
       {...props}
     >
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="">
+        Bike4Life
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -35,8 +34,7 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignUp() {
-  const [message, setMessage] = useState("") 
-  const [classSpan, setClassSpan] = useState("default") 
+  const navigate = useNavigate();
   const submitSignUp = (user: any) => {
     fetch(`${process.env.REACT_APP_AUTH_API_URL}/users`, {
       method: "POST",
@@ -46,11 +44,14 @@ export default function SignUp() {
       body: JSON.stringify(user),
     }).then((res) => {
       if (res.status === 201) {
-        console.log("User created");
-        setMessage("User created")
+        toast.success('User created', {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        navigate('/')
       } else if (res.status === 409) {
-        console.log("User already exists");
-        setMessage("User already exists")
+        toast.warn('User already exists', {
+          position: toast.POSITION.TOP_RIGHT
+        });
       }
     });
   };
@@ -74,7 +75,7 @@ export default function SignUp() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: '10vh',
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -132,17 +133,6 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
-                />
-              </Grid>
-              <div className={classSpan} style = {{display: "flex", justifyContent: "center", textAlign: "center"}}>
-               {(classSpan === "success") ? <span>{message}</span> : <span>{message}</span>}
-              </div>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>
             </Grid>

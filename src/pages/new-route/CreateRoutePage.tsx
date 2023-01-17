@@ -14,13 +14,14 @@ import { MapContext } from "../../context";
 import { MapLine } from "../../components/mapbox/MapLine";
 import { BtnMyLocation } from "../../components/mapbox";
 import Box from "@mui/material/Box";
-import { UserContext } from "../../context/user/UserContext";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 const CreateRoute = () => {
   const { info, points } = useContext(MapContext);
-  const { token } = useContext(UserContext);
   const theme = createTheme();
-  const [value, setValue] = useState<Dayjs | null>(dayjs("2022-04-07"));
+  const [value, setValue] = useState<Dayjs | null>(dayjs(new Date()));
+  const navigate = useNavigate();
 
   const submitPostRoute = (route: any) => {
     fetch(`${process.env.REACT_APP_ROUTE_API_URL}/routes`, {
@@ -32,11 +33,14 @@ const CreateRoute = () => {
       body: JSON.stringify(route),
     }).then((res) => {
       if (res.status === 200) {
-        console.log("Route Created");
-        alert("Route Created");
+        toast.success('Route reated', {
+          position: toast.POSITION.TOP_RIGHT
+        });
+        navigate('/routes')
       } else if (res.status === 409) {
-        console.log("Route already exists");
-        console.log("Route already exists");
+        toast.warn('Route already exists', {
+          position: toast.POSITION.TOP_RIGHT
+        });
       }
     });
   };
@@ -45,6 +49,9 @@ const CreateRoute = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     if (points?.length === undefined || points.length < 2) {
+      toast.warn('Configure your route on the map', {
+        position: toast.POSITION.TOP_RIGHT
+      });
       return;
     }
     const route = {
@@ -54,9 +61,7 @@ const CreateRoute = () => {
       date: value,
       coordinates: points,
     };
-    console.log(route);
     submitPostRoute(route);
-    console.log(window.sessionStorage.getItem("token"));
   };
 
   return (
@@ -74,7 +79,7 @@ const CreateRoute = () => {
                 <DirectionsBikeIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Create a route!
+                Create a route
               </Typography>
               <div className="row">
                 <TextField
@@ -83,7 +88,7 @@ const CreateRoute = () => {
                   required
                   fullWidth
                   id="routeName"
-                  label="Route Name"
+                  label="Name"
                   autoFocus
                 />
 
@@ -100,7 +105,7 @@ const CreateRoute = () => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DateTimePicker
                     renderInput={(props) => <TextField {...props} />}
-                    label="DateTimePicker"
+                    label="Date"
                     value={value}
                     onChange={(newValue: any) => {
                       setValue(newValue);
@@ -116,7 +121,7 @@ const CreateRoute = () => {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Send
+                Save
               </Button>
             </div>
           </Box>
