@@ -11,6 +11,7 @@ import StarIcon from "@mui/icons-material/StarBorder";
 import Typography from "@mui/material/Typography";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import Container from "@mui/material/Container";
+import {useNavigate} from "react-router-dom";
 
 const tiers = [
   {
@@ -67,6 +68,7 @@ const tiers = [
 ];
 
 function PricingContent() {
+  const navigate = useNavigate();
   return (
     <React.Fragment>
       <GlobalStyles
@@ -134,7 +136,15 @@ function PricingContent() {
                     ))}
                   </ul>
                 </CardContent>
-              
+                <CardActions>
+                  <Button
+                      onClick={()=>navigate("/create-route")}
+                      fullWidth
+                      variant={tier.buttonVariant as 'outlined' | 'contained'}
+                  >
+                    {tier.buttonText}
+                  </Button>
+                </CardActions>
               </Card>
             </Grid>
           ))}
