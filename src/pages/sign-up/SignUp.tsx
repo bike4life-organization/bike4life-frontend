@@ -38,7 +38,7 @@ const theme = createTheme();
 
 export default function SignUp() {
   const [message, setMessage] = useState <string | null>("") 
-  const [classSpan, setClassSpan] = useState("default") 
+  const [error, setError] = useState(false)
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -115,10 +115,11 @@ export default function SignUp() {
       firstName: data.get("firstName"),
     };
     if(validateForm(user) !== null){
-      setClassSpan("error")
+      setError(true)
       setMessage(validateForm(user))
       return
     }
+    setError(false)
     submitSignUp(user);
   };
 
@@ -197,9 +198,11 @@ export default function SignUp() {
                   onChange={(e)=>{setPassword(e.target.value)}}
                 />
               </Grid>
+              <Grid item xs={12}>
               <div className={`message-container`}>
-               {(classSpan === "success") ? <p className={`${classSpan}`}>{message}</p> : <p className={`${classSpan}`}>{message}</p>}
+               {error && <p className='error'>{message}</p>}
               </div>
+             </Grid>
             </Grid>
             <Button
               type="submit"

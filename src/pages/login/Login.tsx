@@ -33,8 +33,8 @@ const theme = createTheme();
 
 export default function SignIn() {
   const [login, setLogin] = useState(false)
-  const [message, setMessage] = useState <string | null>("") 
-  const [classSpan, setClassSpan] = useState("default") 
+  const [message, setMessage] = useState <string | null>("")
+  const [error, setError] = useState(false)
   const [mail, setMail] = useState("")
   const [password, setPassword] = useState("")
   const {loggin, isLoggedIn, loggout} = useUser( )
@@ -50,7 +50,7 @@ const validateForm =(form: any)=>{
     name: ""
   }
   let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/;
-  
+
 
   if(!form.password.trim()){
     errors.name = "Password name can`t be empty"
@@ -67,7 +67,7 @@ const validateForm =(form: any)=>{
     isError = true
   }
   return isError ? errors.name : null
-} 
+}
 
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -78,10 +78,11 @@ const validateForm =(form: any)=>{
       password: data.get("password"),
     }
     if(validateForm(user) !== null){
-      setClassSpan("error")
+      setError(true)
       setMessage(validateForm(user))
       return
     }
+    setError(false)
     loggin(user.email, user.password)
   };
 
@@ -130,8 +131,8 @@ const validateForm =(form: any)=>{
               autoComplete="current-password"
             />
             <div className={`message-container`}>
-               {(classSpan === "success") ? <p className={`${classSpan}`}>{message}</p> : <p className={`${classSpan}`}>{message}</p>}
-              </div>
+               {error && <p className={'error'}>{message}</p>}
+            </div>
             <Button
               type="submit"
               fullWidth
