@@ -17,7 +17,7 @@ export const MapLine = () => {
       const map = new mapboxgl.Map({
         container: mapDiv.current!, // container ID
         style: "mapbox://styles/mapbox/streets-v12", // style URL
-        center: userLocation, // starting position [lng, lat]
+        center: userLocation || [-5.958019357117081,37.40430227266839], // starting position [lng, lat]
         zoom: 14, // starting zoom
       });
       setMap(map);
