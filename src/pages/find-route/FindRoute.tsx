@@ -13,7 +13,6 @@ const FindRoute = () => {
         .catch(err => console.error(err))
   }, []);
 
-  console.log(routes);
   return (
     <div className="find-route">
       <div className="find-route-container">
