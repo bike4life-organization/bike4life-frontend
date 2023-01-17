@@ -11,7 +11,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {toast} from "react-toastify";
-import {useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom"
+import {useState} from 'react';
+import '../../styles/message.scss'
+
 
 function Copyright(props: any) {
   return (
@@ -34,7 +37,15 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignUp() {
+  const [message, setMessage] = useState <string | null>("") 
+  const [classSpan, setClassSpan] = useState("default") 
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [firstName, setFirstName] = useState("")
   const navigate = useNavigate();
+
+
   const submitSignUp = (user: any) => {
     fetch(`${process.env.REACT_APP_AUTH_API_URL}/users`, {
       method: "POST",
@@ -56,6 +67,44 @@ export default function SignUp() {
     });
   };
   
+  const validateForm =(form: any)=>{
+    let isError = false
+    let errors = {
+      name: ""
+    }
+    let regexName = /^[A-Za-zÑñÁáÉéÍíÓóÚúÜü\s]+$/;
+    let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/;
+    
+    if(!form.username.trim()){
+      errors.name = "User name can`t be empty"
+      isError = true
+    }
+
+    if(!form.password.trim()){
+      errors.name = "Password name can`t be empty"
+      isError = true
+    }else if(form.password.length < 8){
+      errors.name = "Password must have at least 8 characters"
+      isError = true
+    }
+
+    if(!form.firstName.trim()){
+      errors.name = "First Name can`t be empty"
+      isError = true
+    }else if(!regexName.test(form.firstName)){
+      errors.name = "Username only accepts letters and spaces"
+      isError = true
+    }
+    if(!form.email.trim()){
+      errors.name = "Email name can`t be empty"
+      isError = true
+    }else if(!regexEmail.test(form.email)){
+      errors.name = "Email incorrect"
+      isError = true
+    }
+    return isError ? errors.name : null
+  } 
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -65,7 +114,11 @@ export default function SignUp() {
       password: data.get("password"),
       firstName: data.get("firstName"),
     };
-    console.log(user);
+    if(validateForm(user) !== null){
+      setClassSpan("error")
+      setMessage(validateForm(user))
+      return
+    }
     submitSignUp(user);
   };
 
@@ -103,6 +156,8 @@ export default function SignUp() {
                   id="firstName"
                   label="First Name"
                   autoFocus
+                  value= {firstName}
+                  onChange={(e: any)=>{setFirstName(e.target.value)}}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -112,6 +167,8 @@ export default function SignUp() {
                   id="username"
                   label="Username"
                   name="username"
+                  value= {username}
+                  onChange={(e)=>{setUsername(e.target.value)}}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -122,6 +179,9 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value= {email}
+                  onChange={(e)=>{setEmail(e.target.value)}}
+                  
                 />
               </Grid>
               <Grid item xs={12}>
@@ -133,8 +193,13 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                   value= {password}
+                  onChange={(e)=>{setPassword(e.target.value)}}
                 />
               </Grid>
+              <div className={`message-container`}>
+               {(classSpan === "success") ? <p className={`${classSpan}`}>{message}</p> : <p className={`${classSpan}`}>{message}</p>}
+              </div>
             </Grid>
             <Button
               type="submit"

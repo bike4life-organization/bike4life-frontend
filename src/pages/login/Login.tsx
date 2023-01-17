@@ -33,6 +33,8 @@ const theme = createTheme();
 
 export default function SignIn() {
   const [login, setLogin] = useState(false)
+  const [message, setMessage] = useState <string | null>("") 
+  const [classSpan, setClassSpan] = useState("default") 
   const [mail, setMail] = useState("")
   const [password, setPassword] = useState("")
   const {loggin, isLoggedIn, loggout} = useUser( )
@@ -42,6 +44,30 @@ useEffect(() => {
   setLogin(isLoggedIn)
 }, [isLoggedIn])
 
+const validateForm =(form: any)=>{
+  let isError = false
+  let errors = {
+    name: ""
+  }
+  let regexEmail = /^(\w+[/./-]?){1,}@[a-z]+[/.]\w{2,}$/;
+  
+
+  if(!form.password.trim()){
+    errors.name = "Password name can`t be empty"
+    isError = true
+  }else if(form.password.length < 8){
+    errors.name = "Password must have at least 8 characters"
+    isError = true
+  }
+  if(!form.email.trim()){
+    errors.name = "Email name can`t be empty"
+    isError = true
+  }else if(!regexEmail.test(form.email)){
+    errors.name = "Email incorrect"
+    isError = true
+  }
+  return isError ? errors.name : null
+} 
 
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -50,6 +76,11 @@ useEffect(() => {
     const user = {
       email: data.get("email"),
       password: data.get("password"),
+    }
+    if(validateForm(user) !== null){
+      setClassSpan("error")
+      setMessage(validateForm(user))
+      return
     }
     loggin(user.email, user.password)
   };
@@ -98,6 +129,9 @@ useEffect(() => {
               onChange = {e=>setPassword(e.target.value)}
               autoComplete="current-password"
             />
+            <div className={`message-container`}>
+               {(classSpan === "success") ? <p className={`${classSpan}`}>{message}</p> : <p className={`${classSpan}`}>{message}</p>}
+              </div>
             <Button
               type="submit"
               fullWidth
