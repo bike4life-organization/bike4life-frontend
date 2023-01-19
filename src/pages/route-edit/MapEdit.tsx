@@ -76,12 +76,12 @@ const MapEdit = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     if (points?.length == undefined && coords?.length == undefined) {
+      toast.warn('Configure your route on the map', {
+        position: toast.POSITION.TOP_RIGHT
+      });
       return;
     }
     if (points?.length !== undefined) {
-      toast.warn('Configure your route on the map', {
-          position: toast.POSITION.TOP_RIGHT
-      });
       setCoords(points);
     }
     const route = {
